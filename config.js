@@ -4,7 +4,7 @@
 
 const GITHUB_CONFIG = {
   owner: "dirtypaws",   // e.g. "mattsmith"
-  repo:  "workouts",               // the repo name
+  repo:  "workout-tracker",               // the repo name
   branch: "main",
   dataFile: "data.json"
 };
