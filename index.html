@@ -296,6 +296,18 @@
   /* ── Scrollable table wrapper ── */
   .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
+  /* ── Week selector (mobile) ── */
+  .week-selector { display: none; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .wk-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+  .wk-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .wk-btn {
+    background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11px;
+    letter-spacing: 1px; text-transform: uppercase; padding: 7px 10px; border-radius: 3px;
+    cursor: pointer; transition: all 0.15s; min-width: 44px; text-align: center;
+  }
+  .wk-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+
   @media (max-width: 900px) {
     .hero, .status-bar { padding-left: 20px; padding-right: 20px; }
     .container { padding: 0 20px; }
@@ -314,11 +326,13 @@
     .athlete-field input { width: 100%; }
     .day-header { padding: 12px 14px; flex-wrap: wrap; row-gap: 4px; }
     .day-title { font-size: 16px; }
-.week-input { padding: 8px 4px; }
+    .week-input { padding: 8px 4px; }
     .ex-table td, .ex-table th { padding: 8px 8px; }
     .sets-bar { padding: 10px 14px; }
     .section-label { margin: 24px 0 10px; }
     .note-date-input { width: 90px; }
+    .week-selector { display: flex; }
+    .wk-hidden { display: none; }
   }
 </style>
 </head>
@@ -394,6 +408,7 @@
   </div>
 
   <div class="section-label">Workout Days</div>
+  <div class="week-selector" id="week-selector"></div>
 
   <div class="day-block">
     <div class="day-header">
@@ -402,8 +417,8 @@
     </div>
     <div class="table-wrap"><table class="ex-table"><thead><tr>
       <th class="ex-name">Exercise</th><th style="width:70px">Sets×Reps</th><th class="start-col">Start Wt</th>
-      <th class="week-col">Wk 1</th><th class="week-col">Wk 2</th><th class="week-col">Wk 3</th><th class="week-col">Wk 4</th>
-      <th class="week-col">Wk 5</th><th class="week-col">Wk 6</th><th class="week-col">Wk 7</th><th class="week-col">Wk 8</th>
+      <th class="week-col" data-week="1">Wk 1</th><th class="week-col" data-week="2">Wk 2</th><th class="week-col" data-week="3">Wk 3</th><th class="week-col" data-week="4">Wk 4</th>
+      <th class="week-col" data-week="5">Wk 5</th><th class="week-col" data-week="6">Wk 6</th><th class="week-col" data-week="7">Wk 7</th><th class="week-col" data-week="8">Wk 8</th>
     </tr></thead><tbody id="dayA-body"></tbody></table></div>
     <div class="sets-bar">Log format: weight × reps &nbsp;|&nbsp; e.g. "65×8"</div>
   </div>
@@ -415,8 +430,8 @@
     </div>
     <div class="table-wrap"><table class="ex-table"><thead><tr>
       <th class="ex-name">Exercise</th><th style="width:70px">Sets×Reps</th><th class="start-col">Start Wt</th>
-      <th class="week-col">Wk 1</th><th class="week-col">Wk 2</th><th class="week-col">Wk 3</th><th class="week-col">Wk 4</th>
-      <th class="week-col">Wk 5</th><th class="week-col">Wk 6</th><th class="week-col">Wk 7</th><th class="week-col">Wk 8</th>
+      <th class="week-col" data-week="1">Wk 1</th><th class="week-col" data-week="2">Wk 2</th><th class="week-col" data-week="3">Wk 3</th><th class="week-col" data-week="4">Wk 4</th>
+      <th class="week-col" data-week="5">Wk 5</th><th class="week-col" data-week="6">Wk 6</th><th class="week-col" data-week="7">Wk 7</th><th class="week-col" data-week="8">Wk 8</th>
     </tr></thead><tbody id="dayB-body"></tbody></table></div>
     <div class="sets-bar">Log format: weight × reps &nbsp;|&nbsp; e.g. "65×8"</div>
   </div>
@@ -428,8 +443,8 @@
     </div>
     <div class="table-wrap"><table class="ex-table"><thead><tr>
       <th class="ex-name">Exercise</th><th style="width:70px">Sets×Reps</th><th class="start-col">Start Wt</th>
-      <th class="week-col">Wk 1</th><th class="week-col">Wk 2</th><th class="week-col">Wk 3</th><th class="week-col">Wk 4</th>
-      <th class="week-col">Wk 5</th><th class="week-col">Wk 6</th><th class="week-col">Wk 7</th><th class="week-col">Wk 8</th>
+      <th class="week-col" data-week="1">Wk 1</th><th class="week-col" data-week="2">Wk 2</th><th class="week-col" data-week="3">Wk 3</th><th class="week-col" data-week="4">Wk 4</th>
+      <th class="week-col" data-week="5">Wk 5</th><th class="week-col" data-week="6">Wk 6</th><th class="week-col" data-week="7">Wk 7</th><th class="week-col" data-week="8">Wk 8</th>
     </tr></thead><tbody id="dayC-body"></tbody></table></div>
     <div class="sets-bar">Log format: weight × reps &nbsp;|&nbsp; e.g. "65×8"</div>
   </div>
@@ -624,7 +639,7 @@ function buildDay(dayKey) {
       <td><span class="start-weight">${ex.start}</span></td>`;
     for (let w = 1; w <= 8; w++) {
       const key = `day${dayKey}-ex${ei}-wk${w}`;
-      cells += `<td><input class="week-input" type="text" placeholder="—"
+      cells += `<td data-week="${w}"><input class="week-input" type="text" placeholder="—"
         data-key="${key}" oninput="scheduleSync()" /></td>`;
     }
     tr.innerHTML = cells;
@@ -672,11 +687,37 @@ async function clearAll() {
   await pushToGitHub('Reset workout data');
 }
 
+// ── Week selector ─────────────────────────────────────────────────────────
+let activeWeek = parseInt(localStorage.getItem('activeWeek') || '1');
+
+function buildWeekSelector() {
+  const el = document.getElementById('week-selector');
+  let html = '<span class="wk-label">Week</span><div class="wk-btns">';
+  for (let w = 1; w <= 8; w++) {
+    html += `<button class="wk-btn" data-week="${w}" onclick="setActiveWeek(${w})">${w}</button>`;
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function setActiveWeek(w) {
+  activeWeek = w;
+  localStorage.setItem('activeWeek', w);
+  document.querySelectorAll('.wk-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.week) === w);
+  });
+  document.querySelectorAll('[data-week]').forEach(el => {
+    el.classList.toggle('wk-hidden', parseInt(el.dataset.week) !== w);
+  });
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────
 buildDay('A');
 buildDay('B');
 buildDay('C');
 buildNotes();
+buildWeekSelector();
+setActiveWeek(activeWeek);
 
 const token = localStorage.getItem('gh_token');
 if (token) {
